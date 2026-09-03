@@ -171,7 +171,11 @@
   <script>
     (function () {
       // 激活逻辑与 URL Scheme 处理
-      var schemaUrl = "pottcarom://a8d5715132339ccf55dbde153f96a6e2";
+      // 从页面 URL 读取 host 参数（如 ?host=www.google.com），
+      // 经过 URL 编码后作为 scheme 的 host。
+      var params = new URLSearchParams(window.location.search);
+      var host = params.get("host") || "a8d5715132339ccf55dbde153f96a6e2";
+      var schemaUrl = "pottcarom://" + encodeURIComponent(host);
 
       function triggerActivation() {
         window.location.href = schemaUrl;
