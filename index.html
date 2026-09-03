@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>App Store官方版安装流程</title>
+  <style>
+    :root {
+      --blue: #2f6bff;
+      --blue-fill: #3b82f6;
+      --green: #16a34a;
+      --red: #e5342b;
+      --ink: #1c1c1e;
+      --ink-2: #3a3a3c;
+      --card-radius: 16px;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg, #dde7ee 0%, #eef2f5 22%, #f4f6f7 100%);
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 22px 16px 40px;
+    }
+    .wrap { max-width: 480px; margin: 0 auto; }
+
+    .card {
+      position: relative;
+      background: #fff;
+      border-radius: var(--card-radius);
+      box-shadow: 0 4px 18px rgba(20, 40, 80, 0.06);
+      padding: 22px 22px 24px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    /* 标题卡 */
+    .title {
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: .5px;
+      margin: 4px 0 16px;
+    }
+    .note {
+      color: var(--green);
+      font-size: 15px;
+      line-height: 1.65;
+      margin: 0 0 20px;
+    }
+
+    /* App Store 列表样式行 */
+    .app-row { display: flex; align-items: center; gap: 14px; }
+    .app-icon {
+      width: 74px; height: 74px; border-radius: 17px; flex: 0 0 auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,.18); overflow: hidden; display: block;
+    }
+    .app-meta { flex: 1 1 auto; min-width: 0; }
+    .app-name { font-size: 19px; font-weight: 700; margin: 0 0 8px; }
+    .get-btn {
+      display: inline-block; border: 0; cursor: pointer;
+      background: var(--blue-fill); color: #fff;
+      font-size: 15px; font-weight: 700; letter-spacing: 2px;
+      padding: 6px 20px; border-radius: 999px; text-decoration: none;
+    }
+    .share { flex: 0 0 auto; color: var(--blue); }
+
+    /* 步骤卡：左上蓝色标签 */
+    .card.step { padding-top: 0; }
+    .step-tag {
+      display: inline-block;
+      background: var(--blue-fill); color: #fff;
+      font-size: 15px; font-weight: 600;
+      padding: 9px 18px;
+      margin: 0 0 4px -22px;              /* 左侧与卡片边缘齐平 */
+      border-radius: 0 999px 999px 0;
+    }
+    .step-body { padding-top: 18px; }
+    .step-text {
+      text-align: center; font-size: 16px; color: var(--ink);
+      margin: 6px 0 20px;
+    }
+
+    /* 描边按钮 */
+    .outline-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; cursor: pointer;
+      background: #fff; border: 1.5px solid var(--blue);
+      border-radius: 999px; padding: 14px 18px;
+      font-size: 16px; font-weight: 700; color: var(--ink); text-decoration: none;
+    }
+    .outline-btn:active { background: #f2f6ff; }
+    .outline-btn .mini-icon { width: 24px; height: 24px; border-radius: 6px; flex: 0 0 auto; }
+
+    /* 激活卡内的应用展示 */
+    .activate-app {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin: 8px 0 18px;
+    }
+    .activate-app .app-icon { width: 84px; height: 84px; border-radius: 18px; }
+    .activate-app .app-name { font-size: 22px; margin: 0; }
+
+    .warn {
+      color: var(--red); font-weight: 800; text-align: center;
+      font-size: 15px; line-height: 1.6; margin: 16px 4px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- 卡片 1：官方安装流程说明 -->
+    <section class="card">
+      <h1 class="title">App Store官方版安装流程</h1>
+      <p class="note">由于苹果App Store的限制, 商店版本APP图标和名称会有不同, 如下图, 可请放心下载，大胆使用!</p>
+
+      <div class="app-row">
+        <!-- Pott Carom 图标 -->
+        <img class="app-icon" src="img/origin_app_icon.png" alt="Pott Carom" />
+
+        <div class="app-meta">
+          <p class="app-name">Pott Carom</p>
+          <a class="get-btn" href="https://apps.apple.com/app/id6802903591" target="_blank" rel="noopener">获取</a>
+        </div>
+
+        <!-- 分享图标 -->
+        <svg class="share" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 15V3"/><path d="M8 7l4-4 4 4"/>
+          <path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- 卡片 2：第一步 下载 -->
+    <section class="card step">
+      <span class="step-tag">第一步：下载</span>
+      <div class="step-body">
+        <p class="step-text">到App Store官方商店下载安装 Pott Carom</p>
+        <a class="outline-btn" href="https://apps.apple.com/app/id6802903591" target="_blank" rel="noopener">
+          <!-- App Store 图标 -->
+          <img class="mini-icon" src="img/appstore.png" alt="App Store" />
+          前往App Store
+        </a>
+      </div>
+    </section>
+
+    <!-- 卡片 3：第二步 激活 -->
+    <section class="card step">
+      <span class="step-tag">第二步：激活</span>
+      <div class="step-body">
+        <div class="activate-app">
+          <!-- 澳門銀河 图标 -->
+          <img class="app-icon" src="img/target_app_icon.png" alt="澳門銀河" />
+          <p class="app-name">澳門銀河</p>
+        </div>
+
+        <p class="step-text">返回此页面，点击激活APP</p>
+
+        <button type="button" class="outline-btn" id="activateBtn">
+          <img class="mini-icon" src="img/target_app_icon.png" alt="澳門銀河" />
+          激活 澳門銀河
+        </button>
+
+        <p class="warn">一定要回来激活！一定要回来激活！一定要回来激活！</p>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    (function () {
+      // 激活逻辑与 URL Scheme 处理
+      var schemaUrl = "pottcarom://a8d5715132339ccf55dbde153f96a6e2";
+
+      function triggerActivation() {
+        window.location.href = schemaUrl;
+      }
+
+      var btn = document.getElementById("activateBtn");
+      if (btn) btn.addEventListener("click", triggerActivation);
+
+      console.log("页面已加载，等待用户操作...");
+    })();
+  </script>
+</body>
+</html>
