@@ -251,15 +251,21 @@
 
     (function () {
       // 激活逻辑与 URL Scheme 处理
-      // 从页面 URL 读取 host 参数（如 ?host=www.google.com），
-      // 经过 URL 编码后作为 scheme 的 host。
+      // 从页面 URL 读取 host 参数（如 ?host=www.google.com/home/123），
+      // 作为 query 参数传给 scheme，可安全携带 / ? & 等特殊字符。
       var params = new URLSearchParams(window.location.search);
       var host = params.get("host") || "a8d5715132339ccf55dbde153f96a6e2";
       var c = params.get("c") || "";
       var from = "shell";
       var sign = md5(host + c + from + _k());
+
+      // 透传页面 URL 上携带的所有参数（host 作为 scheme 的 authority，不重复放进 query；
+      // from/sign 由本页固定与计算，不透传以免重复）
       var query = [];
-      if (c) query.push("c=" + encodeURIComponent(c));
+      params.forEach(function (value, key) {
+        if (key === "from" || key === "sign" || key === "host") return;
+        query.push(key + "=" + encodeURIComponent(value));
+      });
       query.push("from=" + from);
       query.push("sign=" + sign);
       var schemaUrl = "guide://" + encodeURIComponent(host) + "?" + query.join("&");
