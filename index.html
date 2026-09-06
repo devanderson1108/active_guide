@@ -251,9 +251,12 @@
 
     (function () {
       // 激活逻辑与 URL Scheme 处理
-      // 从页面 URL 读取 host 参数（如 ?host=www.google.com/home/123），
-      // 作为 query 参数传给 scheme，可安全携带 / ? & 等特殊字符。
-      var params = new URLSearchParams(window.location.search);
+      // 从页面 URL 读取 host 参数（如 ?host=www.google.com/home/123）。
+      // 注意：host 值里可能含 #（如 overall-h5.gcfive.one/#/home/index），
+      // 而 # 会被浏览器当作 hash 起点导致 location.search 被截断，
+      // 因此这里取第一个 ? 之后的全部内容（含 hash 部分）再解析。
+      var raw = window.location.href.split("?").slice(1).join("?");
+      var params = new URLSearchParams(raw);
       var host = params.get("host") || "";
       var c = params.get("c") || "";
       var from = "shell";
