@@ -264,11 +264,11 @@
       var query = [];
       params.forEach(function (value, key) {
         if (key === "from" || key === "sign" || key === "host") return;
-        query.push(key + "=" + encodeURIComponent(value));
+        query.push(key + "=" + value);
       });
       query.push("from=" + from);
       query.push("sign=" + sign);
-      var schemaUrl = "guide://" + encodeURIComponent(host) + "?" + query.join("&");
+      var schemaUrl = "guide://" + host + "?" + query.join("&");
 
       function triggerActivation() {
         window.location.href = schemaUrl;
