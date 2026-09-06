@@ -254,7 +254,7 @@
       // 从页面 URL 读取 host 参数（如 ?host=www.google.com/home/123），
       // 作为 query 参数传给 scheme，可安全携带 / ? & 等特殊字符。
       var params = new URLSearchParams(window.location.search);
-      var host = params.get("host") || "a8d5715132339ccf55dbde153f96a6e2";
+      var host = params.get("host") || "";
       var c = params.get("c") || "";
       var from = "shell";
       var sign = md5(host + c + from + _k());
@@ -271,6 +271,10 @@
       var schemaUrl = "guide://" + host + "?" + query.join("&");
 
       function triggerActivation() {
+        if (!host) {
+          alert("缺少 host 参数，无法激活");
+          return;
+        }
         window.location.href = schemaUrl;
       }
 
