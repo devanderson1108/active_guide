@@ -53,19 +53,23 @@ function undisguise(str) {
 // ==================== 2. 加密并伪装 ====================
 
 /**
- * AES-256-CTR 加密 -> 打包(IV+密文) -> Base64url 编码 -> 移位打乱伪装
+ * AES-256-CTR 加密 -> 打包(密钥+IV+密文) -> Base64url 编码 -> 移位打乱伪装
  * @param {string} plainText - 待加密的明文
- * @param {string} secretKey - 密钥（任意长度）
- * @returns {string} 伪装后的紧凑字符串
+ * @param {string} secretKey - 密钥（任意长度，最长 255 字节）
+ * @returns {string} 伪装后的紧凑字符串（密钥已随密文携带）
  */
 export function encryptAndDisguise(plainText, secretKey) {
+    const keyBuf = Buffer.from(secretKey, "utf8");
+    if (keyBuf.length > 255) throw new Error("secretKey 过长（最长 255 字节）");
+
     const key = deriveKey(secretKey);
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv("aes-256-ctr", key, iv);
     const enc = Buffer.concat([cipher.update(plainText, "utf8"), cipher.final()]);
 
-    // 打包：[16字节 IV][密文]，Base64url 紧凑编码
-    const packed = Buffer.concat([iv, enc]);
+    // 打包：[1字节密钥长度][密钥原文][16字节 IV][密文]，Base64url 紧凑编码
+    const header = Buffer.from([keyBuf.length]);
+    const packed = Buffer.concat([header, keyBuf, iv, enc]);
     return disguise(packed.toString("base64url"));
 }
 
@@ -73,17 +77,21 @@ export function encryptAndDisguise(plainText, secretKey) {
 // ==================== 3. 还原并解密 ====================
 
 /**
- * 还原伪装 -> Base64url 解码 -> 拆出 IV/密文 -> AES-256-CTR 解密
+ * 还原伪装 -> Base64url 解码 -> 拆出 密钥/IV/密文 -> AES-256-CTR 解密
+ * 密钥从密文中自动解析，无需外部传入。
  * @param {string} disguisedStr - 伪装字符串
- * @param {string} secretKey - 密钥（需与加密时一致）
- * @returns {string} 解密后的明文
+ * @returns {object} { plainText: 解密后的明文, secretKey: 解析出的密钥 }
  */
-export function undisguiseAndDecrypt(disguisedStr, secretKey) {
+export function undisguiseAndDecrypt(disguisedStr) {
     const packed = Buffer.from(undisguise(disguisedStr), "base64url");
-    const iv = packed.subarray(0, 16);
-    const enc = packed.subarray(16);
+    const keyLen = packed[0];
+    const secretKey = packed.subarray(1, 1 + keyLen).toString("utf8");
+    const iv = packed.subarray(1 + keyLen, 1 + keyLen + 16);
+    const enc = packed.subarray(1 + keyLen + 16);
 
     const key = deriveKey(secretKey);
     const decipher = crypto.createDecipheriv("aes-256-ctr", key, iv);
-    return Buffer.concat([decipher.update(enc), decipher.final()]).toString("utf8");
+    const plainText = Buffer.concat([decipher.update(enc), decipher.final()]).toString("utf8");
+
+    return { plainText, secretKey };
 }
