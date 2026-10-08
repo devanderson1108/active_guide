@@ -177,7 +177,8 @@
       var raw = window.location.href.split("?").slice(1).join("?");
       var params = new URLSearchParams(raw);
       var p = params.get("p") || "";
-      var schemaUrl = "guide://" + p;
+      var scheme = params.get("scheme") || "guide";
+      var schemaUrl = scheme + "://" + p;
 
       function triggerActivation() {
         if (!p) {
